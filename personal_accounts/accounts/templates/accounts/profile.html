@@ -1,0 +1,37 @@
+<h1>Личный кабинет</h1>
+<p>ФИО: {{ user_profile.username }}</p>
+<p>Email: {{ user_profile.email }}</p>
+<p>Роль: {{ user_profile.get_role_display }}</p>
+<p>Контакты: {{ user_profile.contacts }}</p>
+<p>Уведомления: {{ user_profile.notifications }}</p>
+
+{% if user_profile.role == 'student' %}
+    <h2>Мои курсы</h2>
+    <ul>
+        {% for sub in user_profile.subscriptions.all %}
+            <li>{{ sub.course.title }} (с {{ sub.date_subscribed|date:"d.m.Y" }})</li>
+        {% empty %}
+            <li>Вы не подписаны ни на один курс</li>
+        {% endfor %}
+    </ul>
+{% elif user_profile.role == 'teacher' %}
+    <h2>Курсы, которые я веду</h2>
+    <ul>
+        {% for course in user_profile.teaching_courses.all %}
+            <li>{{ course.title }} ({{ course.start_date|date:"d.m.Y" }} - {{ course.end_date|date:"d.m.Y" }})</li>
+        {% empty %}
+            <li>Вы не ведете ни одного курса</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Курсы, на которые я подписан</h2>
+    <ul>
+        {% for sub in user_profile.subscriptions.all %}
+            <li>{{ sub.course.title }}</li>
+        {% empty %}
+            <li>Вы не подписаны ни на один курс</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{% url 'logout' %}">Выйти</a>

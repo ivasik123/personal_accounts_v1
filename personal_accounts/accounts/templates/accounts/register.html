@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация студента</title>
+    <style>
+        .form-group { margin-bottom: 15px; }
+        .errorlist { color: red; }
+        label { display: block; margin-bottom: 5px; }
+        textarea { width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Регистрация студента</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.full_name.label_tag }}
+            {{ form.full_name }}
+            {{ form.full_name.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.contacts.label_tag }}
+            {{ form.contacts }}
+            {{ form.contacts.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+        </div>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите</a></p>
+</body>
+</html>
