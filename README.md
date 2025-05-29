@@ -99,6 +99,50 @@
 ### AdminAccessMiddleware
 Отслеживает доступы в админку и обновляет поле `last_admin_access`, а также логирует такие события.
 
+## Serializers (serializers.py)
+Этот модуль содержит сериализаторы Django REST Framework для работы с основными моделями системы.
+
+UserProfileSerializer
+Сериализатор для модели пользователя (UserProfile).
+Поля:
+- id (int) - уникальный идентификатор пользователя
+- email (string) - email пользователя (уникальный)
+- username (string) - имя пользователя
+- contacts (string) - контактная информация
+- notifications (string) - настройки уведомлений
+- role (string) - роль пользователя (student/teacher/admin)
+- last_activity (datetime) - дата последней активности
+- is_active (boolean) - флаг активности аккаунта
+- date_joined (datetime) - дата регистрации
+
+Особенности:
+- Поле password доступно только для записи (не отображается при выводе)
+- Поля last_activity и date_joined доступны только для чтения
+- При создании пользователя пароль автоматически хешируется
+
+## CourseSerializer
+Сериализатор для модели курса (Course).
+Поля:
+- id (int) - уникальный идентификатор курса
+- title (string) - название курса
+- description (string) - описание курса
+- start_date (date) - дата начала курса
+- end_date (date) - дата окончания курса
+- is_active (boolean) - флаг активности курса
+
+## SubscriptionSerializer
+Сериализатор для модели подписки (Subscription).
+Поля:
+- id (int) - уникальный идентификатор подписки
+- student (object) - информация о студенте (вложенный UserProfileSerializer)
+- course (object) - информация о курсе (вложенный CourseSerializer)
+- date_subscribed (datetime) - дата подписки
+- is_active (boolean) - флаг активности подписки
+
+Особенности:
+- Использует вложенные сериализаторы для полей student и course
+- Поля только для чтения - нельзя изменить студента или курс через этот сериализатор
+
 ## Особенности реализации
 1. Кастомная модель пользователя с расширенными полями
 2. Отслеживание активности пользователей через middleware
