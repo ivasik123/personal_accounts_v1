@@ -1,22 +1,30 @@
-from rest_framework import serializers
-from django.contrib.auth.hashers import make_password
-from .models import UserProfile, Course, Subscription
+from .models import Course, Subscription
 
+
+from django.contrib.auth.hashers import make_password
+from rest_framework import serializers
+from .models import UserProfile
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = UserProfile
-        fields = ['id', 'email', 'username', 'contacts', 'notifications',
+        fields = ['id', 'email', 'username', 'password', 'contacts', 'notifications',
                   'role', 'last_activity', 'is_active', 'date_joined']
         extra_kwargs = {
-            'password': {'write_only': True},
             'last_activity': {'read_only': True},
             'date_joined': {'read_only': True},
+            'is_active': {'read_only': True},
         }
 
     def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data.get('password'))
-        return super().create(validated_data)
+        password = validated_data.pop('password')
+        user = UserProfile.objects.create(
+            **validated_data,
+            password=make_password(password)
+        )
+        return user
 
 
 class CourseSerializer(serializers.ModelSerializer):

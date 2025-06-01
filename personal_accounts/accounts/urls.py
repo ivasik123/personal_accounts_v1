@@ -17,7 +17,13 @@ urlpatterns = [
 
     # API views
     path('api/', include(router.urls)),
+    path('api/login/', views.UserProfileViewSet.as_view({'post': 'login'}), name='api-login'),
+    path('api/me/', views.UserProfileViewSet.as_view({'get': 'me'}), name='userprofile-me'),
+    path('api/courses/<int:pk>/subscribe/', views.CourseViewSet.as_view({'post': 'subscribe'}), name='course-subscribe'),
+    path('api/courses/<int:pk>/unsubscribe/', views.CourseViewSet.as_view({'post': 'unsubscribe'}), name='course-unsubscribe'),
 
     # Admin reports
     path('admin/user-activity/', views.user_activity_report, name='user_activity_report'),
+
+    *router.urls,
 ]

@@ -156,5 +156,3 @@ class SubscriptionViewSet(viewsets.ReadOnlyModelViewSet):
         if user.role == 'teacher':
             return Subscription.objects.filter(course__teachers=user)
         return Subscription.objects.filter(student=user)
-
-# Оставьте ваши существующие функции представления (user_login, profile и т.д.)

@@ -27,9 +27,12 @@ class AdminAccessMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
 
-        if (request.user.is_authenticated and
-                request.path.startswith(reverse('admin:index')) and
-                request.method == 'GET'):
+        if (
+            request.user.is_authenticated and
+            request.user.is_superuser and  # <-- only for superusers
+            request.path.startswith(reverse('admin:index')) and
+            request.method == 'GET'
+        ):
             UserProfile.objects.filter(pk=request.user.pk).update(
                 last_admin_access=timezone.now()
             )
